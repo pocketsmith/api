@@ -736,6 +736,18 @@
         "tags": [
           "Users"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -757,6 +769,18 @@
         "description": "Updates the user by their ID. You must be authorised as the target user in order to make this request.",
         "tags": [
           "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "requestBody": {
           "content": {
@@ -825,19 +849,7 @@
             "$ref": "#/components/responses/422"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the user.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/institutions/{id}": {
       "get": {
@@ -845,6 +857,18 @@
         "description": "Gets an institution by its ID.",
         "tags": [
           "Institutions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the institution.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -870,6 +894,18 @@
         "description": "Updates the title and currency code for an institution.",
         "tags": [
           "Institutions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the institution.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "requestBody": {
           "content": {
@@ -933,20 +969,20 @@
           "422": {
             "$ref": "#/components/responses/422"
           }
-        }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the institution.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the institution.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ]
+      }
     },
     "/users/{id}/institutions": {
       "get": {
@@ -954,6 +990,18 @@
         "description": "Lists all the institutions belonging to the user.",
         "tags": [
           "Institutions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -982,6 +1030,18 @@
         "description": "Creates an institution belonging to a user.",
         "tags": [
           "Institutions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "requestBody": {
           "content": {
@@ -1029,19 +1089,7 @@
             "$ref": "#/components/responses/422"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the user",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/accounts/{id}": {
       "get": {
@@ -1067,13 +1115,37 @@
           "404": {
             "$ref": "#/components/responses/404"
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ]
       },
       "put": {
         "summary": "Update account",
         "description": "Updates and returns an account by its ID.",
         "tags": [
           "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "requestBody": {
           "content": {
@@ -1124,6 +1196,18 @@
         "tags": [
           "Accounts"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
         "responses": {
           "204": {
             "description": "Success"
@@ -1138,19 +1222,7 @@
             "$ref": "#/components/responses/422"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the account.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/users/{id}/accounts": {
       "get": {
@@ -1158,6 +1230,18 @@
         "description": "Lists all accounts belonging to the user by their ID.",
         "tags": [
           "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -1186,6 +1270,18 @@
         "description": "Creates and returns an account belonging to the user by their ID.",
         "tags": [
           "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "requestBody": {
           "content": {
@@ -1253,19 +1349,7 @@
             "$ref": "#/components/responses/404"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the user.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/institutions/{id}/accounts": {
       "get": {
@@ -1273,6 +1357,18 @@
         "description": "Lists accounts belonging to an institution by its ID.",
         "tags": [
           "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the institution.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -1295,19 +1391,7 @@
             "$ref": "#/components/responses/404"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the institution.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/transaction_accounts/{id}": {
       "get": {
@@ -1315,6 +1399,18 @@
         "description": "Gets a transaction account by its ID.",
         "tags": [
           "Transaction Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the transaction account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -1340,6 +1436,18 @@
         "description": "Change which institution the transaction account belongs to.",
         "tags": [
           "Transaction Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the transaction account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "requestBody": {
           "content": {
@@ -1375,19 +1483,7 @@
             "$ref": "#/components/responses/404"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the transaction account.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/users/{id}/transaction_accounts": {
       "get": {
@@ -1395,6 +1491,18 @@
         "description": "List all transaction accounts belonging to a user.",
         "tags": [
           "Transaction Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -1417,19 +1525,7 @@
             "$ref": "#/components/responses/404"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the user.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/transactions/{id}": {
       "get": {
@@ -1437,6 +1533,18 @@
         "description": "Gets a transaction by its ID.",
         "tags": [
           "Transactions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the transaction",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -1474,6 +1582,16 @@
               "description": "A new comma-separated set of labels for the transaction."
             },
             "example": "foo,bar,baz"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the transaction",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
           }
         ],
         "requestBody": {
@@ -1547,19 +1665,7 @@
             "$ref": "#/components/responses/422"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the transaction",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/users/{id}/transactions": {
       "get": {
@@ -1568,104 +1674,71 @@
         "tags": [
           "Transactions"
         ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Transaction"
-                  }
-                }
-              }
-            }
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
           },
-          "400": {
-            "$ref": "#/components/responses/400"
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Return only transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-01"
           },
-          "403": {
-            "$ref": "#/components/responses/403"
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Return transactions that fall on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-30"
           },
-          "404": {
-            "$ref": "#/components/responses/404"
+          {
+            "name": "only_uncategorised",
+            "in": "query",
+            "description": "If set, will return only uncategorised results.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Only return transactions of this type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "debit",
+                "credit"
+              ]
+            },
+            "example": "debit"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Choose a particular page of the results.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 3
           }
-        }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the account.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        },
-        {
-          "name": "start_date",
-          "in": "query",
-          "description": "Return only transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
-          "required": false,
-          "schema": {
-            "type": "string"
-          },
-          "example": "2016-11-01"
-        },
-        {
-          "name": "end_date",
-          "in": "query",
-          "description": "Return transactions that fall on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
-          "required": false,
-          "schema": {
-            "type": "string"
-          },
-          "example": "2016-11-30"
-        },
-        {
-          "name": "only_uncategorised",
-          "in": "query",
-          "description": "If set, will return only uncategorised results.",
-          "required": false,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 1
-        },
-        {
-          "name": "type",
-          "in": "query",
-          "description": "Only return transactions of this type.",
-          "required": false,
-          "schema": {
-            "type": "string",
-            "enum": [
-              "debit",
-              "credit"
-            ]
-          },
-          "example": "debit"
-        },
-        {
-          "name": "page",
-          "in": "query",
-          "description": "Choose a particular page of the results.",
-          "required": false,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 3
-        }
-      ]
-    },
-    "/accounts/{id}/transactions": {
-      "get": {
-        "summary": "List transactions in account",
-        "description": "Lists transactions belonging to an account by its ID.",
-        "tags": [
-          "Transactions"
         ],
         "responses": {
           "200": {
@@ -1691,73 +1764,106 @@
             "$ref": "#/components/responses/404"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the account.",
-          "required": true,
-          "schema": {
-            "type": "integer"
+      }
+    },
+    "/accounts/{id}/transactions": {
+      "get": {
+        "summary": "List transactions in account",
+        "description": "Lists transactions belonging to an account by its ID.",
+        "tags": [
+          "Transactions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
           },
-          "example": 42
-        },
-        {
-          "name": "start_date",
-          "in": "query",
-          "description": "Return only transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
-          "required": false,
-          "schema": {
-            "type": "string"
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Return only transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-01"
           },
-          "example": "2016-11-01"
-        },
-        {
-          "name": "end_date",
-          "in": "query",
-          "description": "Return transactions that fall on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
-          "required": false,
-          "schema": {
-            "type": "string"
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Return transactions that fall on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-30"
           },
-          "example": "2016-11-30"
-        },
-        {
-          "name": "only_uncategorised",
-          "in": "query",
-          "description": "If set, will return only uncategorised results.",
-          "required": false,
-          "schema": {
-            "type": "integer"
+          {
+            "name": "only_uncategorised",
+            "in": "query",
+            "description": "If set, will return only uncategorised results.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
           },
-          "example": 1
-        },
-        {
-          "name": "type",
-          "in": "query",
-          "description": "Only return transactions of this type.",
-          "required": false,
-          "schema": {
-            "type": "string",
-            "enum": [
-              "debit",
-              "credit"
-            ]
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Only return transactions of this type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "debit",
+                "credit"
+              ]
+            },
+            "example": "debit"
           },
-          "example": "debit"
-        },
-        {
-          "name": "page",
-          "in": "query",
-          "description": "Choose a particular page of the results.",
-          "required": false,
-          "schema": {
-            "type": "integer"
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Choose a particular page of the results.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
           },
-          "example": 3
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
         }
-      ]
+      }
     },
     "/transaction_accounts/{id}/transactions": {
       "get": {
@@ -1765,6 +1871,72 @@
         "description": "Lists transactions belonging to a transaction account by its ID.",
         "tags": [
           "Transactions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the transaction account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Return only transactions on or after this date. Required if `end_date` is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-01"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Return transactions that fall on or before this date. Required if `start_date` is provided. If not provided, defaults to today's date.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-30"
+          },
+          {
+            "name": "only_uncategorised",
+            "in": "query",
+            "description": "If set, will return only uncategorised results.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Only return transactions of this type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "debit",
+                "credit"
+              ]
+            },
+            "example": "debit"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Choose a particular page of the results",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 3
+          }
         ],
         "responses": {
           "200": {
@@ -1796,6 +1968,72 @@
         "description": "Creates a transaction in a transaction account by its ID.",
         "tags": [
           "Transactions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the transaction account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Return only transactions on or after this date. Required if `end_date` is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-01"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Return transactions that fall on or before this date. Required if `start_date` is provided. If not provided, defaults to today's date.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-30"
+          },
+          {
+            "name": "only_uncategorised",
+            "in": "query",
+            "description": "If set, will return only uncategorised results.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Only return transactions of this type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "debit",
+                "credit"
+              ]
+            },
+            "example": "debit"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Choose a particular page of the results",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 3
+          }
         ],
         "requestBody": {
           "content": {
@@ -1877,73 +2115,7 @@
             "$ref": "#/components/responses/422"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the transaction account.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        },
-        {
-          "name": "start_date",
-          "in": "query",
-          "description": "Return only transactions on or after this date. Required if `end_date` is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
-          "required": false,
-          "schema": {
-            "type": "string"
-          },
-          "example": "2016-11-01"
-        },
-        {
-          "name": "end_date",
-          "in": "query",
-          "description": "Return transactions that fall on or before this date. Required if `start_date` is provided. If not provided, defaults to today's date.",
-          "required": false,
-          "schema": {
-            "type": "string"
-          },
-          "example": "2016-11-30"
-        },
-        {
-          "name": "only_uncategorised",
-          "in": "query",
-          "description": "If set, will return only uncategorised results.",
-          "required": false,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 1
-        },
-        {
-          "name": "type",
-          "in": "query",
-          "description": "Only return transactions of this type.",
-          "required": false,
-          "schema": {
-            "type": "string",
-            "enum": [
-              "debit",
-              "credit"
-            ]
-          },
-          "example": "debit"
-        },
-        {
-          "name": "page",
-          "in": "query",
-          "description": "Choose a particular page of the results",
-          "required": false,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 3
-        }
-      ]
+      }
     },
     "/categories/{id}": {
       "get": {
@@ -1951,6 +2123,18 @@
         "description": "Gets a particular category by its ID.",
         "tags": [
           "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the category.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -1976,6 +2160,18 @@
         "description": "Updates the title, colour or parent of the category.",
         "tags": [
           "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the category.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "requestBody": {
           "content": {
@@ -2031,6 +2227,18 @@
         "tags": [
           "Categories"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the category.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
         "responses": {
           "204": {
             "description": "Success"
@@ -2042,19 +2250,7 @@
             "$ref": "#/components/responses/404"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the category.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/users/{id}/categories": {
       "get": {
@@ -2062,6 +2258,18 @@
         "description": "Lists all categories belonging to a user by their ID.",
         "tags": [
           "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "responses": {
           "200": {
@@ -2090,6 +2298,18 @@
         "description": "Creates a category belonging to the user by their ID.",
         "tags": [
           "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
         ],
         "requestBody": {
           "content": {
@@ -2141,19 +2361,7 @@
             "$ref": "#/components/responses/422"
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the user.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        }
-      ]
+      }
     },
     "/users/{id}/budget": {
       "get": {
@@ -2162,6 +2370,28 @@
         "tags": [
           "Budgeting"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "roll_up",
+            "in": "query",
+            "description": "Whether parent categories should have their children rolled up into them. When used, the children will still appear in the collection on their own, but their actual and forecast figures will be rolled up to the root parent.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -2177,29 +2407,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The unique identifier of the account.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        },
-        {
-          "name": "roll_up",
-          "in": "query",
-          "description": "Whether parent categories should have their children rolled up into them. When used, the children will still appear in the collection on their own, but their actual and forecast figures will be rolled up to the root parent.",
-          "required": false,
-          "schema": {
-            "type": "boolean"
-          },
-          "example": true
-        }
-      ]
+      }
     },
     "/users/{id}/budget_summary": {
       "get": {
@@ -2208,87 +2416,63 @@
         "tags": [
           "Budgeting"
         ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BudgetAnalysisPackage"
-                  }
-                }
-              }
-            }
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "The period to analyse in, one of `weeks`, `months` or `years`. Also supported is `event`, although event period analysis is only possible when the budget events gathered align, so in this case where all categories are analysed together, it's highly unlikely that event period analysis will be possible.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "weeks",
+                "months",
+                "years",
+                "event"
+              ]
+            },
+            "example": "weeks"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "description": "The period interval, e.g. if the interval is 2 and the period is weeks, the budget will be analysed fortnightly.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 2
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "The date to start analysing the budget from. This will be bumped out to make full periods as necessary.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-01"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "The date to stop analysing the budget from. This will be bumped out to make full periods as necessary.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-30"
           }
-        }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "User's ID",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 42
-        },
-        {
-          "name": "period",
-          "in": "query",
-          "description": "The period to analyse in, one of `weeks`, `months` or `years. Also supported is `event`, although event period analysis is only possible when the budget events gathered align, so in this case where all categories are analysed together, it's highly unlikely that event period analysis will be possible.",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "enum": [
-              "weeks",
-              "months",
-              "years",
-              "event"
-            ]
-          },
-          "example": "weeks"
-        },
-        {
-          "name": "interval",
-          "in": "query",
-          "description": "The period interval, e.g. if the interval is 2 and the period is weeks, the budget will be analysed fortnightly.",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          },
-          "example": 2
-        },
-        {
-          "name": "start_date",
-          "in": "query",
-          "description": "The date to start analysing the budget from. This will be bumped out to make full periods as necessary.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          },
-          "example": "2016-11-01"
-        },
-        {
-          "name": "end_date",
-          "in": "query",
-          "description": "The date to stop analysing the budget from. This will be bumped out to make full periods as necessary.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          },
-          "example": "2016-11-30"
-        }
-      ]
-    },
-    "/users/{id}/trend_analysis": {
-      "get": {
-        "summary": "Get trend analysis for user",
-        "description": "Get an income and/or expense budget analysis for the given date range and period across any number of categories and scenarios. Akin to the Trends page in PocketSmith.",
-        "tags": [
-          "Budgeting"
         ],
         "responses": {
           "200": {
@@ -2305,85 +2489,109 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "User's ID",
-          "required": true,
-          "schema": {
-            "type": "integer"
+      }
+    },
+    "/users/{id}/trend_analysis": {
+      "get": {
+        "summary": "Get trend analysis for user",
+        "description": "Get an income and/or expense budget analysis for the given date range and period across any number of categories and scenarios. Akin to the Trends page in PocketSmith.",
+        "tags": [
+          "Budgeting"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
           },
-          "example": 42
-        },
-        {
-          "name": "period",
-          "in": "query",
-          "description": "The period to analyse in, one of `weeks`, `months` or `years`. Also supported is `event`, although event period analysis is only possible when the budget events gathered align, so in this case where all categories are analysed together, it's highly unlikely that event period analysis will be possible.",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "enum": [
-              "weeks",
-              "months",
-              "years",
-              "event"
-            ]
+          {
+            "name": "period",
+            "in": "query",
+            "description": "The period to analyse in, one of `weeks`, `months` or `years`. Also supported is `event`, although event period analysis is only possible when the budget events gathered align, so in this case where all categories are analysed together, it's highly unlikely that event period analysis will be possible.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "weeks",
+                "months",
+                "years",
+                "event"
+              ]
+            },
+            "example": "weeks"
           },
-          "example": "weeks"
-        },
-        {
-          "name": "interval",
-          "in": "query",
-          "description": "The period interval, e.g. if the interval is 2 and the period is weeks, the budget will be analysed fortnightly.",
-          "required": true,
-          "schema": {
-            "type": "integer"
+          {
+            "name": "interval",
+            "in": "query",
+            "description": "The period interval, e.g. if the interval is 2 and the period is weeks, the budget will be analysed fortnightly.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": true
           },
-          "example": true
-        },
-        {
-          "name": "start_date",
-          "in": "query",
-          "description": "The date to start analysing the budget from. This will be bumped out to make full periods as necessary.",
-          "required": true,
-          "schema": {
-            "type": "string"
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "The date to start analysing the budget from. This will be bumped out to make full periods as necessary.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-01"
           },
-          "example": "2016-11-01"
-        },
-        {
-          "name": "end_date",
-          "in": "query",
-          "description": "The date to stop analysing the budget from. This will be bumped out to make full periods as necessary.",
-          "required": true,
-          "schema": {
-            "type": "string"
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "The date to stop analysing the budget from. This will be bumped out to make full periods as necessary.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-30"
           },
-          "example": "2016-11-30"
-        },
-        {
-          "name": "categories",
-          "in": "query",
-          "description": "A comma-separated list of category IDs to analyse",
-          "required": true,
-          "schema": {
-            "type": "string"
+          {
+            "name": "categories",
+            "in": "query",
+            "description": "A comma-separated list of category IDs to analyse",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "42,49"
           },
-          "example": "42,49"
-        },
-        {
-          "name": "scenarios",
-          "in": "query",
-          "description": "A comma-separated list of scenario IDs to analyse. You're likely going to want to include all a user's scenarios here, unless you have reason to only analyse for a subset of scenarios. Regardless of what scenarios are analysed, all actuals (transactions) across all accounts will be included.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          },
-          "example": "11,29"
+          {
+            "name": "scenarios",
+            "in": "query",
+            "description": "A comma-separated list of scenario IDs to analyse. You're likely going to want to include all a user's scenarios here, unless you have reason to only analyse for a subset of scenarios. Regardless of what scenarios are analysed, all actuals (transactions) across all accounts will be included.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "11,29"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BudgetAnalysisPackage"
+                  }
+                }
+              }
+            }
+          }
         }
-      ]
+      }
     }
   },
   "security": [
