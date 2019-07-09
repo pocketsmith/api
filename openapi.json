@@ -564,6 +564,36 @@
           }
         }
       },
+      "CategoryRule": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier of the category rule.",
+            "example": 1438154
+          },
+          "payee_matches": {
+            "type": "string",
+            "description": "The keyword/s to match the transactions payees.",
+            "example": "Countdown"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the category rule was created.",
+            "format": "ISO 8601 datetime format",
+            "example": "2019-07-09T10:06:02Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "When the category rule was last updated.",
+            "format": "ISO 8601 datetime format",
+            "example": "2019-07-09T10:06:02Z"
+          }
+        }
+      },
       "BudgetAnalysis": {
         "type": "object",
         "properties": {
@@ -2347,6 +2377,120 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          }
+        }
+      }
+    },
+    "/users/{id}/category_rules": {
+      "get": {
+        "summary": "List category rules in user",
+        "description": "Lists all category rules belonging to a user by their ID.",
+        "tags": [
+          "Category Rules"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryRule"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/categories/{id}/category_rules": {
+      "post": {
+        "summary": "Create category rule in category",
+        "description": "Creates a rule to allocate a category to transactions",
+        "tags": [
+          "Category Rules"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the category.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "category_id",
+                  "payee_matches"
+                ],
+                "properties": {
+                  "payee_matches": {
+                    "type": "string",
+                    "description": "The keyword/s to match the transaction payees",
+                    "example": "Countdown"
+                  },
+                  "apply_to_uncategorised": {
+                    "type": "boolean",
+                    "description": "Apply the created category rule to all uncategorised transactions.",
+                    "example": true
+                  },
+                  "apply_to_all": {
+                    "type": "boolean",
+                    "description": "Apply the created category rule to all transactions.",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryRule"
                 }
               }
             }
