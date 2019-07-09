@@ -567,15 +567,13 @@
       "CategoryRule": {
         "type": "object",
         "properties": {
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
           "id": {
             "type": "integer",
             "description": "The unique identifier of the category rule.",
             "example": 1438154
-          },
-          "category_id": {
-            "type": "integer",
-            "description": "The unique identifier of the category.",
-            "example": 42
           },
           "payee_matches": {
             "type": "string",
@@ -2466,11 +2464,6 @@
                   "payee_matches"
                 ],
                 "properties": {
-                  "category_id": {
-                    "type": "integer",
-                    "description": "The ID of the category the rule is for.",
-                    "example": 42
-                  },
                   "payee_matches": {
                     "type": "string",
                     "description": "The keyword/s to match the transaction payees",
@@ -2478,12 +2471,12 @@
                   },
                   "apply_to_uncategorised": {
                     "type": "boolean",
-                    "description": "Apply the category to all uncategorised transactions matching the keyword/s.",
+                    "description": "Apply the created category rule to all uncategorised transactions.",
                     "example": true
                   },
                   "apply_to_all": {
                     "type": "boolean",
-                    "description": "Apply the category to all transactions matching the keyword/s.",
+                    "description": "Apply the created category rule to all transactions.",
                     "example": false
                   }
                 }
