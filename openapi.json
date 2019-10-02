@@ -45,13 +45,35 @@
               "transactions.read": "Access to list and view accounts and transactions",
               "transactions.write": "Access to create, update and delete transactions",
               "categories.read": "Access to view categories",
-              "categories.write": "Ability to edit and delete categories"
+              "categories.write": "Ability to edit and delete categories",
+              "attachments.read": "Access to view attachments",
+              "attachments.write": "Ability to create, update and delete attachments"
             }
           }
         }
       }
     },
     "responses": {
+      "201": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "204": {
+        "description": "No Content",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
       "400": {
         "description": "Bad Request",
         "content": {
@@ -722,6 +744,88 @@
           },
           "income": {
             "$ref": "#/components/schemas/BudgetAnalysis"
+          }
+        }
+      },
+      "Attachment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier of the attachment",
+            "example": 1438154
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the attachment. If blank or not provided, the title will be derived from the file name.",
+            "example": "Invoice for taxi"
+          },
+          "file_name": {
+            "type": "string",
+            "description": "The file name of the attachment",
+            "example": "taxi.png"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of attachment",
+            "example": "image"
+          },
+          "content_type": {
+            "type": "string",
+            "description": "The content type of the attachment.",
+            "example": "image/png"
+          },
+          "content_type_meta": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "The content type title of the attachment",
+                "example": "PNG"
+              },
+              "description": {
+                "type": "string",
+                "description": "The content type description of the attachment",
+                "example": "PNG image"
+              },
+              "extension": {
+                "type": "string",
+                "description": "The extension type of the attachment",
+                "example": "png"
+              }
+            }
+          },
+          "original_url": {
+            "type": "string",
+            "description": "The url of the attachment",
+            "example": "https://image.com/image.png"
+          },
+          "variants": {
+            "type": "object",
+            "properties": {
+              "large_url": {
+                "type": "string",
+                "description": "The url of the large version of the attachment",
+                "example": "https://image.com/image.png"
+              },
+              "thumb_url": {
+                "type": "string",
+                "description": "The url of the thumb version of the attachment",
+                "example": "https://image.com/image.png"
+              }
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the attachment was created",
+            "format": "ISO 8601 datetime format",
+            "example": "2015-08-16T02:17:02Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "When the attachment was last updated",
+            "format": "ISO 8601 datetime format",
+            "example": "2015-08-16T02:17:02Z"
           }
         }
       },
@@ -2009,60 +2113,6 @@
               "type": "integer"
             },
             "example": 42
-          },
-          {
-            "name": "start_date",
-            "in": "query",
-            "description": "Return only transactions on or after this date. Required if `end_date` is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "example": "2016-11-01"
-          },
-          {
-            "name": "end_date",
-            "in": "query",
-            "description": "Return transactions that fall on or before this date. Required if `start_date` is provided. If not provided, defaults to today's date.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "example": "2016-11-30"
-          },
-          {
-            "name": "only_uncategorised",
-            "in": "query",
-            "description": "If set, will return only uncategorised results.",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            },
-            "example": 1
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "description": "Only return transactions of this type.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "debit",
-                "credit"
-              ]
-            },
-            "example": "debit"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Choose a particular page of the results",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            },
-            "example": 3
           }
         ],
         "requestBody": {
@@ -2733,6 +2783,387 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/attachments/{id}": {
+      "get": {
+        "summary": "Get attachment",
+        "description": "Gets a particular attachment by its ID.",
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Attachment's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update attachment",
+        "description": "Updates the title of the attachment.",
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Attachment's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "The new title of the attachment. If the title is blank or not provided, the server will derive a title from the file name.",
+                    "example": "Invoice for taxi"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete attachment",
+        "description": "Deletes a particular attachment by its ID.",
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Attachment's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/users/{id}/attachments": {
+      "get": {
+        "summary": "Lists attachments in user",
+        "description": "Lists attachments belonging to a user by their ID.",
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "unassigned",
+            "in": "query",
+            "description": "If set, returns unassigned attachments, that are available for assigning to a transaction.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Attachment"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create attachment in user",
+        "description": "Creates an attachment belonging to the user by their ID.",
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the attachment. If the title is blank or not provided, the title will derived from the file name.",
+                    "example": "Invoice for taxi"
+                  },
+                  "file_name": {
+                    "type": "string",
+                    "description": "The file name of the attachment",
+                    "example": "taxi.png"
+                  },
+                  "file_data": {
+                    "type": "string",
+                    "format": "base64",
+                    "description": "the base64-encoded contents of the source file. The supported file types are png, jpg, pdf, xls, xlsx, doc, docx.",
+                    "example": "Base64.strict_encode64(where-my-file-is-kept)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          }
+        }
+      }
+    },
+    "/transactions/{id}/attachments": {
+      "get": {
+        "summary": "List attachments in transaction",
+        "description": "Lists attachments belonging to a transaction by their ID.",
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Transaction's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Attachment"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "post": {
+        "summary": "Assigns attachment to transaction",
+        "description": "Assigns an attachment to the transaction by their ID.",
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Transaction's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "attachment_id": {
+                    "type": "integer",
+                    "description": "Attachment's ID",
+                    "example": 1438154
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          }
+        }
+      }
+    },
+    "/transactions/{id}/attachments/{attachment.id}": {
+      "delete": {
+        "summary": "Unassigns attachment in transaction",
+        "description": "Unassigns a particular attachment by its ID from the transaction ID. This does not delete the attachment, it only removes its association from the transaction.",
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Transaction's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "attachment.id",
+            "in": "path",
+            "description": "Attachment's ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1438154
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       }
