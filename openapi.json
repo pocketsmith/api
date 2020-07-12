@@ -1844,6 +1844,16 @@
             "example": "debit"
           },
           {
+            "name": "search",
+            "in": "query",
+            "description": "Only return transactions matching a search string. Functions the same as a keyword search in the Pocketsmith web app",
+            "required": false,
+            "schema": {
+              "type": "string",
+            },
+            "example": "Paypal"
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Choose a particular page of the results.",
@@ -1943,6 +1953,16 @@
             "example": "debit"
           },
           {
+            "name": "search",
+            "in": "query",
+            "description": "Only return transactions matching a search string. Functions the same as a keyword search in the Pocketsmith web app",
+            "required": false,
+            "schema": {
+              "type": "string",
+            },
+            "example": "Paypal"
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Choose a particular page of the results.",
@@ -2040,6 +2060,16 @@
               ]
             },
             "example": "debit"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Only return transactions matching a search string. Functions the same as a keyword search in the Pocketsmith web app",
+            "required": false,
+            "schema": {
+              "type": "string",
+            },
+            "example": "Paypal"
           },
           {
             "name": "page",
