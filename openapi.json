@@ -1846,7 +1846,7 @@
           {
             "name": "search",
             "in": "query",
-            "description": "Only return transactions matching a search string. Functions the same as a keyword search in the Pocketsmith web app",
+            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
             "required": false,
             "schema": {
               "type": "string",
@@ -1955,7 +1955,7 @@
           {
             "name": "search",
             "in": "query",
-            "description": "Only return transactions matching a search string. Functions the same as a keyword search in the Pocketsmith web app",
+            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
             "required": false,
             "schema": {
               "type": "string",
@@ -2064,7 +2064,7 @@
           {
             "name": "search",
             "in": "query",
-            "description": "Only return transactions matching a search string. Functions the same as a keyword search in the Pocketsmith web app",
+            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
             "required": false,
             "schema": {
               "type": "string",
