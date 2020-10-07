@@ -1844,6 +1844,16 @@
             "example": "debit"
           },
           {
+            "name": "search",
+            "in": "query",
+            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
+            "required": false,
+            "schema": {
+              "type": "string",
+            },
+            "example": "Paypal"
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Choose a particular page of the results.",
@@ -1943,6 +1953,16 @@
             "example": "debit"
           },
           {
+            "name": "search",
+            "in": "query",
+            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
+            "required": false,
+            "schema": {
+              "type": "string",
+            },
+            "example": "Paypal"
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Choose a particular page of the results.",
@@ -2040,6 +2060,16 @@
               ]
             },
             "example": "debit"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
+            "required": false,
+            "schema": {
+              "type": "string",
+            },
+            "example": "Paypal"
           },
           {
             "name": "page",
