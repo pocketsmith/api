@@ -1849,7 +1849,7 @@
             "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
             "required": false,
             "schema": {
-              "type": "string",
+              "type": "string"
             },
             "example": "Paypal"
           },
@@ -1958,7 +1958,7 @@
             "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
             "required": false,
             "schema": {
-              "type": "string",
+              "type": "string"
             },
             "example": "Paypal"
           },
@@ -2067,7 +2067,7 @@
             "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
             "required": false,
             "schema": {
-              "type": "string",
+              "type": "string"
             },
             "example": "Paypal"
           },
