@@ -230,11 +230,13 @@
             "enum": [
               "bank",
               "credits",
+              "cash",
               "stocks",
               "mortgage",
               "loans",
               "vehicle",
               "property",
+              "insurance",
               "other_liability"
             ],
             "example": "bank"
@@ -283,6 +285,26 @@
             "type": "string",
             "description": "The date of the current balance.",
             "example": "2018-02-27"
+          },
+          "current_balance_in_base_currency": {
+            "type": "number",
+            "description": "The current balance of the account in the user's base currency.",
+            "example": 4041.59
+          },
+          "current_balance_exchange_rate": {
+            "type": "number",
+            "description": "The exchange rate between the account's currency and the user's base currency, when different. If the currencies are the same, null is returned.",
+            "example": 1.5
+          },
+          "safe_balance": {
+            "type": "number",
+            "description": "The current safe balance, if safe balance is activated on the account. If safe balance is not activated, then null is returned.",
+            "example": 2694.39
+          },
+          "safe_balance_in_base_currency": {
+            "type": "number",
+            "description": "The current safe balance in the user's base currency, if safe balance is activated on the account. If safe balance is not activated, then null is returned.",
+            "example": 4041.59
           }
         }
       },
@@ -309,6 +331,26 @@
             "type": "string",
             "example": "2015-07-03"
           },
+          "current_balance_in_base_currency": {
+            "type": "number",
+            "description": "The current balance of the transaction account in the user's base currency.",
+            "example": 4041.59
+          },
+          "current_balance_exchange_rate": {
+            "type": "number",
+            "description": "The exchange rate between the transaction account's currency and the user's base currency, when different. If the currencies are the same, null is returned.",
+            "example": 1.5
+          },
+          "safe_balance": {
+            "type": "number",
+            "description": "The current safe balance, if safe balance is activated and available for the transaction account. If safe balance is not available, then null is returned.",
+            "example": 2694.39
+          },
+          "safe_balance_in_base_currency": {
+            "type": "number",
+            "description": "The current safe balance in the user's base currency, if safe balance is activated and available for the transaction account. If safe balance is not available, then null is returned.",
+            "example": 4041.59
+          },
           "starting_balance": {
             "type": "number",
             "example": 3547.45
@@ -332,6 +374,23 @@
             "type": "string",
             "description": "The currency that the account is in. This is determined by the account that the transaction account belongs to.",
             "example": "NZD"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the transaction account.",
+            "enum": [
+              "bank",
+              "credits",
+              "cash",
+              "stocks",
+              "mortgage",
+              "loans",
+              "vehicle",
+              "property",
+              "insurance",
+              "other_liability"
+            ],
+            "example": "bank"
           }
         }
       },
@@ -413,6 +472,26 @@
             "type": "string",
             "description": "The date of the current balance.",
             "example": "2018-02-27"
+          },
+          "current_balance_in_base_currency": {
+            "type": "number",
+            "description": "The current balance of the scenario in the user's base currency.",
+            "example": 8146.8
+          },
+          "current_balance_exchange_rate": {
+            "type": "number",
+            "description": "The exchange rate between the scenario's currency and the user's base currency, when different. If the currencies are the same, null is returned.",
+            "example": 1.5
+          },
+          "safe_balance": {
+            "type": "number",
+            "description": "The current safe balance in the user's base currency, if safe balance is activated on the account associated with the scenario. If safe balance is not activated, then null is returned.",
+            "example": 5431.2
+          },
+          "safe_balance_in_base_currency": {
+            "type": "number",
+            "description": "The current safe balance in the user's base currency, if safe balance is activated on the account associated with the scenario. If safe balance is not available, then null is returned.",
+            "example": 8146.8
           },
           "created_at": {
             "type": "string",
@@ -1370,6 +1449,70 @@
                 }
               }
             }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update the display order of accounts in user",
+        "description": "Updates the display order of accounts belonging to the user, by accepting an array of accounts in their new display order.",
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "accounts"
+                ],
+                "properties": {
+                  "accounts": {
+                    "type": "array",
+                    "description": "List the account objects in their new display order.",
+                    "items": {
+                      "$ref": "#/components/schemas/Account"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Account"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
           },
           "403": {
             "$ref": "#/components/responses/403"
