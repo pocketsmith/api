@@ -1,4 +1,4 @@
-# PocketSmith OpenAPI 3 documentation
+# PocketSmith OpenAPI 3 schema
 
 We've documented our public API using the OpenAPI 3 specification, available in the `openapi.json` file.
 

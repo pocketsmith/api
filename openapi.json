@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "PocketSmith",
-    "description": "The public PocketSmith API",
+    "description": "The PocketSmith API",
     "contact": {
       "name": "API Support",
       "email": "api@pocketsmith.com"
@@ -47,10 +47,44 @@
               "categories.read": "Access to view categories",
               "categories.write": "Ability to edit and delete categories",
               "attachments.read": "Access to view attachments",
-              "attachments.write": "Ability to create, update and delete attachments"
+              "attachments.write": "Ability to create, update and delete attachments",
+              "events.read": "Access to view events",
+              "events.write": "Ability to create, update and delete events"
             }
           }
         }
+      }
+    },
+    "parameters": {
+      "userId": {
+        "name": "id",
+        "in": "path",
+        "description": "The unique identifier of the user.",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        },
+        "example": 42
+      },
+      "scenarioId": {
+        "name": "id",
+        "in": "path",
+        "description": "The unique identifier of the scenario.",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        },
+        "example": 42
+      },
+      "eventId": {
+        "name": "id",
+        "in": "path",
+        "description": "The unique identifier of the event.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "42-1601942400"
       }
     },
     "responses": {
@@ -76,6 +110,16 @@
       },
       "404": {
         "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Conflict",
         "content": {
           "application/json": {
             "schema": {
@@ -139,6 +183,11 @@
             "description": "The day of the week the user wishes their calendars to start on. A number between 0 and 6, where 0 is Sunday and 6 is Saturday.",
             "example": 1
           },
+          "is_reviewing_transactions": {
+            "type": "boolean",
+            "description": "Whether the user wants to review new transactions, transfer transactions or categorisation.",
+            "example": true
+          },
           "base_currency_code": {
             "type": "string",
             "description": "The user's base currency.",
@@ -149,19 +198,49 @@
             "description": "Whether the user wants to see all accounts in their base currency instead of the native account currency.",
             "example": false
           },
-          "created_at": {
-            "type": "string",
-            "description": "When the user signed up.",
-            "example": "2015-07-02T22:14:49Z"
-          },
-          "updated_at": {
-            "type": "string",
-            "description": "When the user was last updated.",
-            "example": "2015-07-02T22:14:49Z"
-          },
           "using_multiple_currencies": {
             "type": "boolean",
             "description": "Whether the user has multiple currencies in use across their account.",
+            "example": true
+          },
+          "available_accounts": {
+            "type": "integer",
+            "description": "The user's total number of available accounts.",
+            "example": 3
+          },
+          "available_budgets": {
+            "type": "integer",
+            "description": "The user's total number of available budgets.",
+            "example": 3
+          },
+          "forecast_last_updated_at": {
+            "type": "string",
+            "description": "When the user's forecast was last updated.",
+            "example": "2015-07-02T22:14:49Z"
+          },
+          "forecast_last_accessed_at": {
+            "type": "string",
+            "description": "When the user's forecast was last accessed.",
+            "example": "2015-07-02T22:14:49Z"
+          },
+          "forecast_start_date": {
+            "type": "string",
+            "description": "The date that the user's forecast starts.",
+            "example": "2015-07-01"
+          },
+          "forecast_end_date": {
+            "type": "string",
+            "description": "The date that the user's forecast ends.",
+            "example": "2015-07-15"
+          },
+          "forecast_defer_recalculate": {
+            "type": "boolean",
+            "description": "Whether the user's forecast recalculation should be deferred.",
+            "example": false
+          },
+          "forecast_needs_recalculate": {
+            "type": "boolean",
+            "description": "Whether the user's forecast needs to be recalculated.",
             "example": true
           },
           "last_logged_in_at": {
@@ -172,6 +251,16 @@
           "last_activity_at": {
             "type": "string",
             "description": "When the user last interacted with PocketSmith, via any application or the API.",
+            "example": "2015-07-02T22:14:49Z"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the user signed up.",
+            "example": "2015-07-02T22:14:49Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "When the user was last updated.",
             "example": "2015-07-02T22:14:49Z"
           }
         }
@@ -237,6 +326,7 @@
               "vehicle",
               "property",
               "insurance",
+              "other_asset",
               "other_liability"
             ],
             "example": "bank"
@@ -388,6 +478,7 @@
               "vehicle",
               "property",
               "insurance",
+              "other_asset",
               "other_liability"
             ],
             "example": "bank"
@@ -534,6 +625,11 @@
             "type": "number",
             "example": 34.6
           },
+          "amount_in_base_currency": {
+            "type": "number",
+            "description": "The amount of the transaction in the user's base currency.",
+            "example": 51.9
+          },
           "date": {
             "type": "string",
             "description": "The date the transaction took place.",
@@ -541,7 +637,7 @@
           },
           "is_transfer": {
             "type": "boolean",
-            "description": "Whether the transaction was a transfer.",
+            "description": "Whether the transaction is a transfer.",
             "example": false
           },
           "category": {
@@ -592,6 +688,21 @@
               "pending",
               "posted"
             ]
+          },
+          "needs_review": {
+            "type": "boolean",
+            "description": "Whether the transaction needs to be reviewed.",
+            "example": true
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the transaction was created.",
+            "example": "2018-02-27T22:42:22Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "When the transaction was last updated.",
+            "example": "2018-02-27T22:42:22Z"
           }
         }
       },
@@ -626,22 +737,43 @@
             "description": "The unique identifier of the parent category of this category, or null if this category has no parent (i.e. is a top-level category)",
             "example": 42
           },
+          "is_transfer": {
+            "type": "boolean",
+            "description": "Whether this category has been marked as a transfer category.",
+            "example": false
+          },
+          "is_bill": {
+            "type": "boolean",
+            "description": "Whether the category is a bill category. A bill category is when budgeted amounts are normally spent at once, instead of spread across a budgeting period. This category will be included in the bill reminder email when set to true.",
+            "example": true
+          },
+          "roll_up": {
+            "type": "boolean",
+            "description": "Whether the category's budget is rolled up into its parent category, if a parent category is present.",
+            "example": false
+          },
+          "refund_behaviour": {
+            "type": "string",
+            "nullable": true,
+            "description": "How the category's refunds or deductions should be reported on.",
+            "enum": [
+              "debits_are_deductions",
+              "credits_are_refunds",
+              null
+            ],
+            "example": "credits_are_refunds"
+          },
           "created_at": {
             "type": "string",
             "description": "When the category was created.",
-            "format": "ISO 8601 datetime format",
+            "format": "ISO 8601 timestamp",
             "example": "2015-08-16T02:17:02Z"
           },
           "updated_at": {
             "type": "string",
             "description": "When the category was last updated.",
-            "format": "ISO 8601 datetime format",
+            "format": "ISO 8601 timestamp",
             "example": "2015-08-16T02:17:02Z"
-          },
-          "is_transfer": {
-            "type": "boolean",
-            "description": "Whether this category has been marked as a transfer category.",
-            "example": false
           }
         }
       },
@@ -664,13 +796,13 @@
           "created_at": {
             "type": "string",
             "description": "When the category rule was created.",
-            "format": "ISO 8601 datetime format",
+            "format": "ISO 8601 timestamp",
             "example": "2019-07-09T10:06:02Z"
           },
           "updated_at": {
             "type": "string",
             "description": "When the category rule was last updated.",
-            "format": "ISO 8601 datetime format",
+            "format": "ISO 8601 timestamp",
             "example": "2019-07-09T10:06:02Z"
           }
         }
@@ -687,6 +819,11 @@
             "type": "string",
             "description": "The end date of the budget analysis.",
             "example": "2016-11-30"
+          },
+          "currency_code": {
+            "type": "string",
+            "description": "The currency of the budget analysis.",
+            "example": "nzd"
           },
           "total_actual_amount": {
             "type": "number",
@@ -739,6 +876,11 @@
             "type": "string",
             "description": "The end date of the period.",
             "example": "2016-11-30"
+          },
+          "currency_code": {
+            "type": "string",
+            "description": "The currency of the period.",
+            "example": "nzd"
           },
           "actual_amount": {
             "type": "number",
@@ -806,13 +948,93 @@
           }
         }
       },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the event.",
+            "example": "42-1601942400"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "scenario": {
+            "$ref": "#/components/schemas/Scenario"
+          },
+          "amount": {
+            "type": "number",
+            "description": "The amount of the event.",
+            "example": 250.5
+          },
+          "amount_in_base_currency": {
+            "type": "number",
+            "description": "The amount of the event in the user's base currency.",
+            "example": 375.75
+          },
+          "currency_code": {
+            "type": "string",
+            "description": "The currency code of the event.",
+            "example": "nzd"
+          },
+          "date": {
+            "type": "string",
+            "description": "The date of the event.",
+            "example": "2020-10-27"
+          },
+          "colour": {
+            "type": "string",
+            "description": "The CSS hex-style colour of the event.",
+            "example": "#F63737"
+          },
+          "note": {
+            "type": "string",
+            "description": "The note of the event.",
+            "example": "Buy more beer every Friday from the local brewery."
+          },
+          "repeat_type": {
+            "type": "string",
+            "description": "The repeat type of the event.",
+            "enum": [
+              "once",
+              "daily",
+              "weekly",
+              "fortnightly",
+              "monthly",
+              "yearly",
+              "each weekday"
+            ],
+            "example": "weekly"
+          },
+          "repeat_interval": {
+            "type": "integer",
+            "description": "The repeat interval of how often the event takes place.",
+            "example": 1
+          },
+          "series_id": {
+            "type": "integer",
+            "description": "The unique identifier of the series that the event belongs to.",
+            "example": 42
+          },
+          "series_start_id": {
+            "type": "string",
+            "description": "The unique identifier of the series followed by the series's start date.",
+            "example": "42-1593993600"
+          },
+          "infinite_series": {
+            "type": "boolean",
+            "description": "Whether the event repeats and does not have an end date.",
+            "example": true
+          }
+        }
+      },
       "Attachment": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "description": "The unique identifier of the attachment",
-            "example": 1438154
+            "example": 42
           },
           "title": {
             "type": "string",
@@ -821,12 +1043,12 @@
           },
           "file_name": {
             "type": "string",
-            "description": "The file name of the attachment",
+            "description": "The file name of the attachment.",
             "example": "taxi.png"
           },
           "type": {
             "type": "string",
-            "description": "The type of attachment",
+            "description": "The type of attachment.",
             "example": "image"
           },
           "content_type": {
@@ -839,24 +1061,24 @@
             "properties": {
               "title": {
                 "type": "string",
-                "description": "The content type title of the attachment",
+                "description": "The content type title of the attachment.",
                 "example": "PNG"
               },
               "description": {
                 "type": "string",
-                "description": "The content type description of the attachment",
+                "description": "The content type description of the attachment.",
                 "example": "PNG image"
               },
               "extension": {
                 "type": "string",
-                "description": "The extension type of the attachment",
+                "description": "The extension type of the attachment.",
                 "example": "png"
               }
             }
           },
           "original_url": {
             "type": "string",
-            "description": "The url of the attachment",
+            "description": "The url of the attachment.",
             "example": "https://image.com/image.png"
           },
           "variants": {
@@ -864,27 +1086,132 @@
             "properties": {
               "large_url": {
                 "type": "string",
-                "description": "The url of the large version of the attachment",
+                "description": "The url of the large version of the attachment.",
                 "example": "https://image.com/image.png"
               },
               "thumb_url": {
                 "type": "string",
-                "description": "The url of the thumb version of the attachment",
+                "description": "The url of the thumb version of the attachment.",
                 "example": "https://image.com/image.png"
               }
             }
           },
           "created_at": {
             "type": "string",
-            "description": "When the attachment was created",
-            "format": "ISO 8601 datetime format",
+            "description": "When the attachment was created.",
+            "format": "ISO 8601 timestamp",
             "example": "2015-08-16T02:17:02Z"
           },
           "updated_at": {
             "type": "string",
-            "description": "When the attachment was last updated",
-            "format": "ISO 8601 datetime format",
+            "description": "When the attachment was last updated.",
+            "format": "ISO 8601 timestamp",
             "example": "2015-08-16T02:17:02Z"
+          }
+        }
+      },
+      "SavedSearch": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier of the saved search.",
+            "example": 42
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the saved search.",
+            "example": "Craft beer"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the saved search was created.",
+            "format": "ISO 8601 timestamp",
+            "example": "2015-08-16T02:17:02Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "When the saved search was last updated.",
+            "format": "ISO 8601 timestamp",
+            "example": "2015-08-16T02:17:02Z"
+          }
+        }
+      },
+      "Currency": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ISO 4217 or unofficial currency code.",
+            "example": "nzd"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the currency.",
+            "example": "New Zealand Dollar"
+          },
+          "minor_unit": {
+            "type": "integer",
+            "description": "The number of digits after the minor unit separator.",
+            "example": 2
+          },
+          "separators": {
+            "$ref": "#/components/schemas/CurrencySeparators"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "The symbol of the currency.",
+            "example": "$"
+          }
+        }
+      },
+      "CurrencySeparators": {
+        "type": "object",
+        "properties": {
+          "major": {
+            "type": "string",
+            "description": "The separator used in the major unit.",
+            "example": ","
+          },
+          "minor": {
+            "type": "string",
+            "description": "The seperator used for the minor unit.",
+            "example": "."
+          }
+        }
+      },
+      "TimeZone": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the time zone.",
+            "example": "Auckland"
+          },
+          "utc_offset": {
+            "type": "integer",
+            "description": "The time zone's UTC offset in seconds.",
+            "example": 46800
+          },
+          "formatted_name": {
+            "type": "string",
+            "description": "The formatted name of the time zone.",
+            "example": "(GMT+13:00) Auckland"
+          },
+          "formatted_offset": {
+            "type": "string",
+            "description": "The formatted offset of the time zone.",
+            "example": "+13:00"
+          },
+          "abbreviation": {
+            "type": "string",
+            "description": "The abbreviation of the time zone.",
+            "example": "NZDT"
+          },
+          "identifier": {
+            "type": "string",
+            "description": "The tz database name of the time zone.",
+            "example": "Pacific/Auckland"
           }
         }
       },
@@ -918,6 +1245,9 @@
                 }
               }
             }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
           }
         }
       }
@@ -951,6 +1281,9 @@
                 }
               }
             }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -1173,6 +1506,16 @@
               "type": "integer"
             },
             "example": 42
+          },
+          {
+            "name": "merge_into_institution_id",
+            "in": "query",
+            "description": "The unique identifier of the institution to merge into.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 44
           }
         ]
       }
@@ -1355,6 +1698,29 @@
                     "type": "string",
                     "description": "A new currency code for the account.",
                     "example": "NZD"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The type of the account.",
+                    "enum": [
+                      "bank",
+                      "credits",
+                      "cash",
+                      "loans",
+                      "mortgage",
+                      "stocks",
+                      "vehicle",
+                      "property",
+                      "insurance",
+                      "other_asset",
+                      "other_liability"
+                    ],
+                    "example": "bank"
+                  },
+                  "is_net_worth": {
+                    "type": "boolean",
+                    "description": "Whether the account is a net worth account.",
+                    "example": false
                   }
                 }
               }
@@ -1573,11 +1939,13 @@
                     "enum": [
                       "bank",
                       "credits",
+                      "cash",
                       "loans",
                       "mortgage",
                       "stocks",
                       "vehicle",
                       "property",
+                      "insurance",
                       "other_asset",
                       "other_liability"
                     ],
@@ -1604,6 +1972,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
           }
         }
       }
@@ -1690,7 +2061,7 @@
       },
       "put": {
         "summary": "Update transaction account",
-        "description": "Change which institution the transaction account belongs to.",
+        "description": "Updates the transaction account by its ID.",
         "tags": [
           "Transaction Accounts"
         ],
@@ -1716,6 +2087,16 @@
                     "type": "integer",
                     "description": "The unique identifier of a new institution for the transaction account.",
                     "example": 42
+                  },
+                  "starting_balance": {
+                    "type": "number",
+                    "description": "The starting balance amount of the transaction account.",
+                    "example": 3547.45
+                  },
+                  "starting_balance_date": {
+                    "type": "string",
+                    "description": "The starting balance date of the transaction account.",
+                    "example": "2015-03-15"
                   }
                 }
               }
@@ -1738,6 +2119,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
           }
         }
       }
@@ -1830,17 +2214,6 @@
         ],
         "parameters": [
           {
-            "name": "labels",
-            "in": "query",
-            "description": "A new set of labels for the transaction.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "A new comma-separated set of labels for the transaction."
-            },
-            "example": "foo,bar,baz"
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "The unique identifier of the transaction.",
@@ -1895,6 +2268,16 @@
                   "note": {
                     "type": "string",
                     "description": "A new note for the transaction."
+                  },
+                  "needs_review": {
+                    "type": "boolean",
+                    "description": "Whether the transaction needs to be reviewed or not.",
+                    "example": false
+                  },
+                  "labels": {
+                    "type": "string",
+                    "description": "A new comma-separated set of labels for the transaction.",
+                    "example": "foo,bar,baz"
                   }
                 }
               }
@@ -1922,6 +2305,36 @@
             "$ref": "#/components/responses/422"
           }
         }
+      },
+      "delete": {
+        "summary": "Delete transaction",
+        "description": "Deletes a transaction and all its data by ID.",
+        "tags": [
+          "Transactions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the transaction.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
       }
     },
     "/users/{id}/transactions": {
@@ -1945,7 +2358,7 @@
           {
             "name": "start_date",
             "in": "query",
-            "description": "Return only transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
+            "description": "Limit to transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
             "required": false,
             "schema": {
               "type": "string"
@@ -1955,7 +2368,7 @@
           {
             "name": "end_date",
             "in": "query",
-            "description": "Return transactions that fall on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
+            "description": "Limit to transactions on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
             "required": false,
             "schema": {
               "type": "string"
@@ -1963,9 +2376,19 @@
             "example": "2016-11-30"
           },
           {
-            "name": "only_uncategorised",
+            "name": "updated_since",
             "in": "query",
-            "description": "If set, will return only uncategorised results.",
+            "description": "Limit to transactions updated since an ISO 8601 timestamp.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-14T09:20:33+13:00"
+          },
+          {
+            "name": "uncategorised",
+            "in": "query",
+            "description": "Limit to uncategorised transactions.",
             "required": false,
             "schema": {
               "type": "integer"
@@ -1975,7 +2398,7 @@
           {
             "name": "type",
             "in": "query",
-            "description": "Only return transactions of this type.",
+            "description": "Limit to transactions of this type.",
             "required": false,
             "schema": {
               "type": "string",
@@ -1987,9 +2410,19 @@
             "example": "debit"
           },
           {
+            "name": "needs_review",
+            "in": "query",
+            "description": "Limit to transactions that need to be reviewed.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
             "name": "search",
             "in": "query",
-            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
+            "description": "Limit to transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in ISO 8601 format.",
             "required": false,
             "schema": {
               "type": "string"
@@ -2054,7 +2487,7 @@
           {
             "name": "start_date",
             "in": "query",
-            "description": "Return only transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
+            "description": "Limit to transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
             "required": false,
             "schema": {
               "type": "string"
@@ -2064,7 +2497,7 @@
           {
             "name": "end_date",
             "in": "query",
-            "description": "Return transactions that fall on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
+            "description": "Limit to transactions on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
             "required": false,
             "schema": {
               "type": "string"
@@ -2072,9 +2505,19 @@
             "example": "2016-11-30"
           },
           {
-            "name": "only_uncategorised",
+            "name": "updated_since",
             "in": "query",
-            "description": "If set, will return only uncategorised results.",
+            "description": "Limit to transactions updated since an ISO 8601 timestamp.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-14T09:20:33+13:00"
+          },
+          {
+            "name": "uncategorised",
+            "in": "query",
+            "description": "Limit to uncategorised transactions.",
             "required": false,
             "schema": {
               "type": "integer"
@@ -2084,7 +2527,7 @@
           {
             "name": "type",
             "in": "query",
-            "description": "Only return transactions of this type.",
+            "description": "Limit to transactions of this type.",
             "required": false,
             "schema": {
               "type": "string",
@@ -2096,9 +2539,148 @@
             "example": "debit"
           },
           {
+            "name": "needs_review",
+            "in": "query",
+            "description": "Limit to transactions that need to be reviewed.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
             "name": "search",
             "in": "query",
-            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
+            "description": "Limit to transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in ISO 8601 format.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Paypal"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Choose a particular page of the results.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/categories/{id}/transactions": {
+      "get": {
+        "summary": "List transactions in categories",
+        "description": "Lists transactions belonging to one or more categories by their IDs.",
+        "tags": [
+          "Transactions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "A comma-separated list of category IDs.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "42,43"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Limit to transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-01"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Limit to transactions on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-30"
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "description": "Limit to transactions updated since an ISO 8601 timestamp.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-14T09:20:33+13:00"
+          },
+          {
+            "name": "uncategorised",
+            "in": "query",
+            "description": "Limit to uncategorised transactions.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Limit to transactions of this type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "debit",
+                "credit"
+              ]
+            },
+            "example": "debit"
+          },
+          {
+            "name": "needs_review",
+            "in": "query",
+            "description": "Limit to transactions that need to be reviewed.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Limit to transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in ISO 8601 format.",
             "required": false,
             "schema": {
               "type": "string"
@@ -2163,7 +2745,7 @@
           {
             "name": "start_date",
             "in": "query",
-            "description": "Return only transactions on or after this date. Required if `end_date` is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
+            "description": "Limit to transactions on or after this date. Required if end_date is provided. If not provided, defaults to the furtherest date allowed by the user's subscription.",
             "required": false,
             "schema": {
               "type": "string"
@@ -2173,7 +2755,7 @@
           {
             "name": "end_date",
             "in": "query",
-            "description": "Return transactions that fall on or before this date. Required if `start_date` is provided. If not provided, defaults to today's date.",
+            "description": "Limit to transactions on or before this date. Required if start_date is provided. If not provided, defaults to today's date.",
             "required": false,
             "schema": {
               "type": "string"
@@ -2181,9 +2763,19 @@
             "example": "2016-11-30"
           },
           {
-            "name": "only_uncategorised",
+            "name": "updated_since",
             "in": "query",
-            "description": "If set, will return only uncategorised results.",
+            "description": "Limit to transactions updated since an ISO 8601 timestamp.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-14T09:20:33+13:00"
+          },
+          {
+            "name": "uncategorised",
+            "in": "query",
+            "description": "Limit to uncategorised transactions.",
             "required": false,
             "schema": {
               "type": "integer"
@@ -2193,7 +2785,7 @@
           {
             "name": "type",
             "in": "query",
-            "description": "Only return transactions of this type.",
+            "description": "Limit to transactions of this type.",
             "required": false,
             "schema": {
               "type": "string",
@@ -2205,9 +2797,19 @@
             "example": "debit"
           },
           {
+            "name": "needs_review",
+            "in": "query",
+            "description": "Limit to transactions that need to be reviewed.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
             "name": "search",
             "in": "query",
-            "description": "Return transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in yyyy-mm-dd format.",
+            "description": "Limit to transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in ISO 8601 format.",
             "required": false,
             "schema": {
               "type": "string"
@@ -2321,6 +2923,11 @@
                   "cheque_number": {
                     "type": "string",
                     "description": "A cheque number for the transaction."
+                  },
+                  "needs_review": {
+                    "type": "boolean",
+                    "description": "Whether the transaction needs to be reviewed or not.",
+                    "example": false
                   }
                 }
               }
@@ -2390,7 +2997,7 @@
       },
       "put": {
         "summary": "Update category",
-        "description": "Updates the title, colour or parent of the category.",
+        "description": "Updates a category by its ID.",
         "tags": [
           "Categories"
         ],
@@ -2426,6 +3033,32 @@
                     "type": "integer",
                     "description": "The unique identifier of a parent category for the category, making this category a child of that category.",
                     "example": 42
+                  },
+                  "is_transfer": {
+                    "type": "boolean",
+                    "description": "Set the category as a transfer category.",
+                    "example": false
+                  },
+                  "is_bill": {
+                    "type": "boolean",
+                    "description": "Set the category as a bill category.",
+                    "example": true
+                  },
+                  "roll_up": {
+                    "type": "boolean",
+                    "description": "Set the category to be rolled up into its parent category.",
+                    "example": false
+                  },
+                  "refund_behaviour": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Set the refund behaviour of the category.",
+                    "enum": [
+                      "debits_are_deductions",
+                      "credits_are_refunds",
+                      null
+                    ],
+                    "example": "credits_are_refunds"
                   }
                 }
               }
@@ -2567,6 +3200,32 @@
                     "type": "integer",
                     "description": "The unique identifier of a category to be the parent of this category.",
                     "example": 42
+                  },
+                  "is_transfer": {
+                    "type": "boolean",
+                    "description": "Set the category as a transfer category.",
+                    "example": false
+                  },
+                  "is_bill": {
+                    "type": "boolean",
+                    "description": "Set the category as a bill category.",
+                    "example": true
+                  },
+                  "roll_up": {
+                    "type": "boolean",
+                    "description": "Set the category to be rolled up into its parent category.",
+                    "example": false
+                  },
+                  "refund_behaviour": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Set the refund behaviour of the category.",
+                    "enum": [
+                      "debits_are_deductions",
+                      "credits_are_refunds",
+                      null
+                    ],
+                    "example": "credits_are_refunds"
                   }
                 }
               }
@@ -2834,6 +3493,15 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       }
@@ -2936,6 +3604,420 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          }
+        }
+      }
+    },
+    "/users/{id}/forecast_cache": {
+      "delete": {
+        "summary": "Delete forecast cache for user",
+        "description": "Delete the user's cached forecast by recalculating the forecast.",
+        "tags": [
+          "Budgeting"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/events/{id}": {
+      "get": {
+        "summary": "Get event",
+        "description": "Gets a particular event by its ID.",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/eventId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update event",
+        "description": "Updates an event by its ID.",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/eventId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "behaviour"
+                ],
+                "properties": {
+                  "behaviour": {
+                    "type": "string",
+                    "description": "Whether the update applies only to this event, to all events within the series from this event or to all events within the series.",
+                    "enum": [
+                      "one",
+                      "forward",
+                      "all"
+                    ],
+                    "example": "all"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "description": "The amount of the event. A positive amount is a credit, and a negative amount is a debit.",
+                    "example": 11.5
+                  },
+                  "repeat_type": {
+                    "type": "string",
+                    "description": "The repeat type of the event.",
+                    "enum": [
+                      "once",
+                      "daily",
+                      "weekly",
+                      "fortnightly",
+                      "monthly",
+                      "yearly",
+                      "each weekday"
+                    ],
+                    "example": "weekly"
+                  },
+                  "repeat_interval": {
+                    "type": "integer",
+                    "description": "The repeat interval of the event.",
+                    "example": 1
+                  },
+                  "note": {
+                    "type": "string",
+                    "description": "A note for the event.",
+                    "example": "Need more beer."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete event",
+        "description": "Deletes an event by its ID.",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/eventId"
+          },
+          {
+            "name": "behaviour",
+            "in": "query",
+            "description": "Whether the delete applies only to this event, to all events within the series from this event or to all events within the series.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "one",
+                "forward",
+                "all"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          }
+        }
+      }
+    },
+    "/users/{id}/events": {
+      "get": {
+        "summary": "List events in user.",
+        "description": "Lists events belonging to a user by their ID.",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Return the events from and including this date.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-01"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Return the events until and including this date.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-30"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/scenarios/{id}/events": {
+      "get": {
+        "summary": "List events in scenario.",
+        "description": "Lists events belonging to a scenario by their ID.",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/scenarioId"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Return the events from and including this date.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-01"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Return the events until and including this date.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-30"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create event in scenario",
+        "description": "Creates an event in a scenario by its ID.",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/scenarioId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "category_id",
+                  "date",
+                  "amount",
+                  "repeat_type"
+                ],
+                "properties": {
+                  "category_id": {
+                    "type": "integer",
+                    "description": "The unique identifier of the category for the event.",
+                    "example": 42
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "The starting date of the event.",
+                    "example": "2020-10-27"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "description": "The amount of the event. A positive amount is a credit, and a negative amount is a debit.",
+                    "example": 11.5
+                  },
+                  "repeat_type": {
+                    "type": "string",
+                    "description": "The repeat type of the event.",
+                    "enum": [
+                      "once",
+                      "daily",
+                      "weekly",
+                      "fortnightly",
+                      "monthly",
+                      "yearly",
+                      "each weekday"
+                    ],
+                    "example": "weekly"
+                  },
+                  "repeat_interval": {
+                    "type": "integer",
+                    "description": "The repeat interval of the event.",
+                    "example": 1,
+                    "default": 1
+                  },
+                  "note": {
+                    "type": "string",
+                    "description": "A note for the event.",
+                    "example": "New beers for sampling over the weekends."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
           }
         }
       }
@@ -3028,6 +4110,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
           }
         }
       },
@@ -3271,9 +4356,6 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
-          },
-          "422": {
-            "$ref": "#/components/responses/422"
           }
         }
       }
@@ -3316,6 +4398,166 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/users/{id}/labels": {
+      "get": {
+        "summary": "List labels in user",
+        "description": "Lists labels belonging to a user by their ID.",
+        "tags": [
+          "Labels"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "example": [
+                  "craftbeer",
+                  "bargains",
+                  "gaming",
+                  "Trip to Auckland"
+                ]
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/users/{id}/saved_searches": {
+      "get": {
+        "summary": "List saved searches in user",
+        "description": "Lists saved searches belonging to a user by their ID.",
+        "tags": [
+          "Saved Searches"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavedSearch"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/currencies": {
+      "get": {
+        "summary": "List currencies",
+        "description": "Lists currencies supported by PocketSmith.",
+        "tags": [
+          "Currencies"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Currency"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currencies/{id}": {
+      "get": {
+        "summary": "Get currency",
+        "description": "Gets a particular currency by its ID.",
+        "tags": [
+          "Currencies"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the currency.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "nzd"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Currency"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/time_zones": {
+      "get": {
+        "summary": "List time zones",
+        "description": "Lists time zones.",
+        "tags": [
+          "Time Zones"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeZone"
+                  }
+                }
+              }
+            }
           }
         }
       }
