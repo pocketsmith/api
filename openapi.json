@@ -750,7 +750,7 @@
             "description": "The sum of all forecast sources (budget events) in the period, for comparison against the actual amount.",
             "example": -60
           },
-          "refund_amound": {
+          "refund_amount": {
             "type": "number",
             "description": "This attribute tracks the amount that has been refunded or deducted to the actual amount. When a category is set to \"always expense\", any credit transactions are treated as refunds and when set to \"always income\", any debit transactions are treated as deductions.",
             "example": 5.6
