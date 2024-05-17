@@ -2348,7 +2348,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The unique identifier of the account.",
+            "description": "The unique identifier of the user.",
             "required": true,
             "schema": {
               "type": "integer"
