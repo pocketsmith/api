@@ -2262,7 +2262,7 @@
                   },
                   "category_id": {
                     "type": "integer",
-                    "description": "The unique identifier of a new category for the transaction.",
+                    "description": "The unique identifier of a new category for the transaction. Sending an empty string will uncategorize the transaction.",
                     "example": 42
                   },
                   "note": {
