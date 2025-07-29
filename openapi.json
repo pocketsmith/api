@@ -1314,11 +1314,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "A new email address for the user.",
-                    "example": "foo@bar.com"
-                  },
                   "name": {
                     "type": "string",
                     "description": "A new name for the user.",
