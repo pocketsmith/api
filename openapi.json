@@ -2273,6 +2273,55 @@
                     "type": "string",
                     "description": "A new comma-separated set of labels for the transaction.",
                     "example": "foo,bar,baz"
+                  },
+                  "splits": {
+                    "type": "array",
+                    "description": "Split this transaction into multiple transactions. When provided without an explicit amount parameter, the original transaction's amount will be automatically adjusted to original_amount - sum(split_amounts). When provided with an explicit amount parameter, the amount + sum(split_amounts) must equal the original transaction amount. Splitting is atomic: all splits are validated before the original transaction and any splits are saved.",
+                    "items": {
+                      "type": "object",
+                      "required": ["amount"],
+                      "properties": {
+                        "amount": {
+                          "type": "number",
+                          "description": "The amount for this split transaction.",
+                          "example": 30.00
+                        },
+                        "payee": {
+                          "type": "string",
+                          "description": "The payee for this split transaction. If not provided, inherits from the parent transaction.",
+                          "example": "Restaurant ABC"
+                        },
+                        "category_id": {
+                          "type": "integer",
+                          "description": "The category ID for this split transaction. If not provided, inherits from the parent transaction.",
+                          "example": 42
+                        },
+                        "note": {
+                          "type": "string",
+                          "description": "A note for this split transaction. If not provided, inherits from the parent transaction.",
+                          "example": "Lunch portion"
+                        },
+                        "date": {
+                          "type": "string",
+                          "description": "The date for this split transaction. If not provided, defaults to the parent transaction's date.",
+                          "example": "2018-02-27"
+                        }
+                      }
+                    },
+                    "example": [
+                      {
+                        "amount": 30.00,
+                        "category_id": 101,
+                        "payee": "Restaurant ABC",
+                        "note": "Lunch portion"
+                      },
+                      {
+                        "amount": 19.95,
+                        "category_id": 102,
+                        "payee": "Transport",
+                        "note": "Bus fare"
+                      }
+                    ]
                   }
                 }
               }
@@ -2281,11 +2330,31 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Success. When splits are provided, the response includes both the updated transaction and the newly created split transactions.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Transaction"
+                  "oneOf": [
+                    {
+                      "description": "Standard response when no splits are provided",
+                      "$ref": "#/components/schemas/Transaction"
+                    },
+                    {
+                      "description": "Response when splits are provided",
+                      "type": "object",
+                      "properties": {
+                        "transaction": {
+                          "$ref": "#/components/schemas/Transaction"
+                        },
+                        "split_transactions": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Transaction"
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
