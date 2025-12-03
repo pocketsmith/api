@@ -2242,7 +2242,7 @@
                   },
                   "amount": {
                     "type": "number",
-                    "description": "A new amount for the transaction. A minus sign at the start of the amount means the transaction is a debit / expense; omitting a sign means it's a credit / income.",
+                    "description": "A new amount for the transaction (signed). A negative amount means the transaction is a debit / expense; a positive amount means it's a credit / income.",
                     "example": -225
                   },
                   "date": {
@@ -2953,7 +2953,7 @@
                   "amount": {
                     "type": "number",
                     "description": "The amount of the transaction. A positive amount is a credit, and a negative amount is a debit.",
-                    "example": 11.5
+                    "example": -11.5
                   },
                   "date": {
                     "type": "string",
