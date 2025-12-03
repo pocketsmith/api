@@ -2242,8 +2242,8 @@
                   },
                   "amount": {
                     "type": "number",
-                    "description": "A new amount for the transaction.",
-                    "example": 225
+                    "description": "A new amount for the transaction. A minus sign at the start of the amount means the transaction is a debit / expense; omitting a sign means it's a credit / income.",
+                    "example": -225
                   },
                   "date": {
                     "type": "string",
@@ -2276,7 +2276,7 @@
                   },
                   "splits": {
                     "type": "array",
-                    "description": "Split this transaction into multiple transactions. When provided without an explicit amount parameter, the original transaction's amount will be automatically adjusted to original_amount - sum(split_amounts). When provided with an explicit amount parameter, the amount + sum(split_amounts) must equal the original transaction amount. Splitting is atomic: all splits are validated before the original transaction and any splits are saved.",
+                    "description": "Split this transaction into multiple transactions. The correctly calculated remainder amount parameter must be provided, which equals to the amount - sum(split_amounts). Splitting is atomic: all splits are validated before the original transaction and any splits are saved.",
                     "items": {
                       "type": "object",
                       "required": ["amount"],
@@ -2296,10 +2296,10 @@
                           "description": "The category ID for this split transaction. If not provided, inherits from the parent transaction.",
                           "example": 42
                         },
-                        "note": {
-                          "type": "string",
-                          "description": "A note for this split transaction. If not provided, inherits from the parent transaction.",
-                          "example": "Lunch portion"
+                        "is_transfer": {
+                          "type": "boolean",
+                          "description": "Whether this split transaction should be indicated as a transfer.",
+                          "example": false
                         },
                         "date": {
                           "type": "string",
