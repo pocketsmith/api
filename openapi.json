@@ -2284,7 +2284,7 @@
                         "amount": {
                           "type": "number",
                           "description": "The amount for this split transaction.",
-                          "example": 30.00
+                          "example": -30.00
                         },
                         "payee": {
                           "type": "string",
@@ -2310,13 +2310,13 @@
                     },
                     "example": [
                       {
-                        "amount": 30.00,
+                        "amount": -30.00,
                         "category_id": 101,
                         "payee": "Restaurant ABC",
                         "note": "Lunch portion"
                       },
                       {
-                        "amount": 19.95,
+                        "amount": -19.95,
                         "category_id": 102,
                         "payee": "Transport",
                         "note": "Bus fare"
