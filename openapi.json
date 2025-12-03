@@ -2242,7 +2242,7 @@
                   },
                   "amount": {
                     "type": "number",
-                    "description": "A new amount for the transaction (signed). A negative amount means the transaction is a debit / expense; a positive amount means it's a credit / income.",
+                    "description": "The amount of the transaction (signed). A positive amount is a credit, and a negative amount is a debit.",
                     "example": -225
                   },
                   "date": {
@@ -2276,7 +2276,7 @@
                   },
                   "splits": {
                     "type": "array",
-                    "description": "Split this transaction into multiple transactions. The correctly calculated remainder amount parameter must be provided, which equals to the amount - sum(split_amounts). Splitting is atomic: all splits are validated before the original transaction and any splits are saved.",
+                    "description": "Split this transaction into multiple transactions. The correctly calculated remainder amount parameter must be provided, which is equal to the amount - sum(split_amounts). Splitting is atomic: all splits are validated before the original transaction and any splits are saved.",
                     "items": {
                       "type": "object",
                       "required": ["amount"],
@@ -2952,7 +2952,7 @@
                   },
                   "amount": {
                     "type": "number",
-                    "description": "The amount of the transaction. A positive amount is a credit, and a negative amount is a debit.",
+                    "description": "The amount of the transaction (signed). A positive amount is a credit, and a negative amount is a debit.",
                     "example": -11.5
                   },
                   "date": {
