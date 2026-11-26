@@ -793,6 +793,11 @@
             "description": "The keyword/s to match the transactions payees.",
             "example": "Countdown"
           },
+          "matched_transactions_count": {
+            "type": "integer",
+            "description": "The number of transactions that have been categorised by the category rule.",
+            "example": 12
+          },
           "created_at": {
             "type": "string",
             "description": "When the category rule was created.",
@@ -2788,6 +2793,125 @@
         }
       }
     },
+    "/category_rules/{id}/transactions": {
+      "get": {
+        "summary": "List transactions in category rule",
+        "description": "Lists transactions that have been categorised by a category rule by its ID.",
+        "tags": [
+          "Transactions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the category rule.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Limit to transactions on or after this date. Required if end_date is provided.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-01"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Limit to transactions on or before this date. Required if start_date is provided.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2016-11-30"
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "description": "Limit to transactions updated since an ISO 8601 timestamp.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-10-14T09:20:33+13:00"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Limit to transactions of this type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "debit",
+                "credit"
+              ]
+            },
+            "example": "debit"
+          },
+          {
+            "name": "needs_review",
+            "in": "query",
+            "description": "Limit to transactions that need to be reviewed.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Limit to transactions matching a keyword search string. The provided string is matched against the transaction amount, account name, payee, category title, note, labels, and the date in ISO 8601 format.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Paypal"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Choose a particular page of the results.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
     "/transaction_accounts/{id}/transactions": {
       "get": {
         "summary": "List transactions in transaction account",
@@ -3319,10 +3443,134 @@
         }
       }
     },
+    "/users/{id}/categories/rule_order": {
+      "get": {
+        "summary": "List categories in user by rule order",
+        "description": "Lists all categories belonging to a user by their ID, in the order that their category rules are applied to transactions. When rules from more than one category match a transaction, the transaction is given the category that appears first in this list. Every category is returned at the top level of the list, including child categories and categories that have no rules.",
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update category rule order in user",
+        "description": "Sets the order that category rules are applied to transactions, by ordering the categories belonging to a user by their ID. Any subset of the user's categories can be provided, whether they have rules or not. Categories that are not provided are reset to the default, lowest precedence. Returns the same response as listing categories by rule order.",
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "categories"
+                ],
+                "properties": {
+                  "categories": {
+                    "type": "array",
+                    "description": "The categories in the order that their rules should be applied, highest precedence first. Each category can only be provided once.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "description": "The unique identifier of the category.",
+                          "example": 42
+                        }
+                      }
+                    },
+                    "example": [
+                      {
+                        "id": 42
+                      },
+                      {
+                        "id": 43
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          }
+        }
+      }
+    },
     "/users/{id}/category_rules": {
       "get": {
         "summary": "List category rules in user",
-        "description": "Lists all category rules belonging to a user by their ID.",
+        "description": "Lists all category rules belonging to a user by their ID, in the order that they are applied to transactions.",
         "tags": [
           "Category Rules"
         ],
@@ -3429,6 +3677,127 @@
           },
           "422": {
             "$ref": "#/components/responses/422"
+          }
+        }
+      }
+    },
+    "/categories/{category_id}/category_rules/{category_rule_id}": {
+      "put": {
+        "summary": "Update category rule in category",
+        "description": "Updates the keyword/s of a category rule by its ID. Transactions already categorised by the rule keep their category. The updated rule is only applied to existing transactions when apply_to_uncategorised or apply_to_all is set.",
+        "tags": [
+          "Category Rules"
+        ],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "description": "The unique identifier of the category.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "category_rule_id",
+            "in": "path",
+            "description": "The unique identifier of the category rule.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "payee_matches"
+                ],
+                "properties": {
+                  "payee_matches": {
+                    "type": "string",
+                    "description": "The new keyword/s to match the transaction payees.",
+                    "example": "Countdown"
+                  },
+                  "apply_to_uncategorised": {
+                    "type": "boolean",
+                    "description": "Apply the updated category rule to all uncategorised transactions.",
+                    "example": true
+                  },
+                  "apply_to_all": {
+                    "type": "boolean",
+                    "description": "Apply the updated category rule to all transactions.",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryRule"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete category rule in category",
+        "description": "Deletes a particular category rule by its ID. Transactions that were categorised by the rule are not deleted, and they keep their category.",
+        "tags": [
+          "Category Rules"
+        ],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "description": "The unique identifier of the category.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          },
+          {
+            "name": "category_rule_id",
+            "in": "path",
+            "description": "The unique identifier of the category rule.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 42
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       }
